@@ -8,6 +8,7 @@ gem 'bootstrap-sass', '2.3.2.0'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'pg', '0.15.1'
 gem 'rails_12factor', '0.0.2'
+gem 'factory_girl_rails', '4.2.1'
 
 group :development, :test do
   gem 'rspec-rails', '2.13.1'
