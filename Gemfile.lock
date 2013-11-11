@@ -207,7 +207,6 @@ DEPENDENCIES
   bootstrap-will_paginate (= 0.0.9)
   capybara (= 2.1.0)
   certified
-  coffee-rails (= 4.0.0)
   database_cleaner
   devise
   factory_girl_rails (= 4.2.1)
