@@ -1,3 +1,3 @@
-class ApplicationHelper
-  # To change this template use File | Settings | File Templates.
+module ApplicationHelper
+
 end
