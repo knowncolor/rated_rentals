@@ -1,3 +1,16 @@
-input {
-  width: 80%;
+@import "bootstrap";
+
+.input-xl, .btn-xl {
+  height: 50px;
+  font-size: 22px;
+}
+
+#error_explanation {
+  @extend .alert;
+  @extend .alert-error;
+  @extend .alert-block;
+}
+
+.field_with_errors {
+  @extend .has-error;
 }

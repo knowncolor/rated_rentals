@@ -1,0 +1,159 @@
+<script>
+    var autocomplete;
+
+    function initialize() {
+        // Create the autocomplete object, restricting the search
+        // to geographical location types.
+        autocomplete = new google.maps.places.Autocomplete(
+                /** @type {HTMLInputElement} */(document.getElementById('address-search')),
+                { types: ['geocode'] });
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            fillInAddress();
+        });
+    }
+
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var geolocation = new google.maps.LatLng(
+                        position.coords.latitude, position.coords.longitude);
+                autocomplete.setBounds(new google.maps.LatLngBounds(geolocation,
+                        geolocation));
+            });
+        }
+    }
+
+    // The START and END in square brackets define a snippet for our documentation:
+    // [START region_fillform]
+    function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+
+        // clear existing values
+        document.getElementById('review_street_number').value = "";
+        document.getElementById('review_route').value = "";
+        document.getElementById('review_postal_town').value = "";
+        document.getElementById('review_postal_code').value = "";
+
+        var addressLatLong = new google.maps.LatLng(place.geometry.location.ob, place.geometry.location.pb);
+
+        // fill in hidden longitude and latitude
+        document.getElementById('review_decimal_degrees_latitude').value = addressLatLong.lat();
+        document.getElementById('review_decimal_degrees_longitude').value = addressLatLong.lng();
+
+        for (var i = 0; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            var addressLongName = place.address_components[i]['long_name'];
+
+            // street_number
+            if (addressType == 'street_number' && addressLongName) {
+                document.getElementById('review_street_number').value = addressLongName;
+            }
+
+            // street
+            if (addressType == 'route' && addressLongName) {
+                document.getElementById('review_route').value = addressLongName;
+            }
+
+            // town
+            if ( $.inArray(addressType, ['postal_town', 'locality']) > -1 && addressLongName) {
+                document.getElementById('review_postal_town').value = addressLongName;
+            }
+
+            // postal_code
+            if ( $.inArray(addressType, ['postal_code', 'postal_code_prefix']) > -1 && addressLongName) {
+                document.getElementById('review_postal_code').value = addressLongName;
+            }
+
+            var div = document.getElementById('address');
+            div.innerHTML = div.innerHTML + '<br /> Type:' + addressType + '. Short: ' + place.address_components[i]['short_name'] + '. Long: '  + place.address_components[i]['long_name'];
+        }
+
+        // center map on new location
+        var mapOptions = {
+            zoom: 16,
+            center: addressLatLong
+        };
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: addressLatLong,
+            map: map,
+            title: 'Where you lived!'
+        });
+
+    }
+</script>
+
+<div class='container'>
+
+  <h1>Write A Review</h1>
+
+  <p>Tell us about where you lived and what it was like.</p>
+
+  <%= form_for @review, url: {action: "create"}, html: {class: 'form-horizontal'} do |f| %>
+
+      <%= render 'shared/error_messages' %>
+
+      <fieldset>
+        <legend>Where did you live?</legend>
+        <div class='form-group'>
+          <label class="sr-only" for="search">Search for an address</label>
+
+          <div class='col-sm-12'>
+            <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-lg', :placeholder => 'Search for an address', :onFocus => 'geolocate()'} %>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_street_number">House Number</label>
+
+          <div class='col-sm-4'>
+            <%= f.text_field :street_number, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_route">Street</label>
+
+          <div class='col-sm-6'>
+            <%= f.text_field :route, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_postal_town">Town or City</label>
+
+          <div class='col-sm-6'>
+            <%= f.text_field :postal_town, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_postal_code">Postal Code</label>
+
+          <div class='col-sm-6'>
+            <%= f.text_field :postal_code, class: 'form-control' %>
+          </div>
+        </div>
+
+        <%= f.hidden_field :decimal_degrees_latitude %>
+        <%= f.hidden_field :decimal_degrees_longitude %>
+
+
+        <div id="map-canvas" style="height: 300px;"></div>
+
+      </fieldset>
+
+
+      <fieldset>
+        <legend>What was it like?</legend>
+      </fieldset>
+
+
+      <%= button_tag "Save Review", :name => nil, :class => 'btn btn-primary btn-lrg' %>
+  <% end %>
+
+
+</div>

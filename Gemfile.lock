@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/potenza/bootstrap_form
+  revision: 61a1a9d8cf4bd005b8b0ceafcfc04393fbd4757d
+  specs:
+    bootstrap_form (1.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -52,7 +58,7 @@ GEM
       execjs
     coffee-script-source (1.6.3)
     database_cleaner (1.2.0)
-    devise (3.2.0)
+    devise (3.2.1)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -105,12 +111,12 @@ GEM
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
-    omniauth-facebook (1.4.1)
+    omniauth-facebook (1.5.0)
       omniauth-oauth2 (~> 1.1.0)
     omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
-    orm_adapter (0.4.0)
+    orm_adapter (0.5.0)
     pg (0.15.1-x86-mingw32)
     polyglot (0.3.3)
     rack (1.5.2)
@@ -205,6 +211,7 @@ DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
   better_errors
   bootstrap-will_paginate (= 0.0.9)
+  bootstrap_form!
   capybara (= 2.1.0)
   certified
   database_cleaner

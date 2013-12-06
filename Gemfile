@@ -9,7 +9,9 @@ gem 'rails_12factor', '0.0.2'
 gem 'factory_girl_rails', '4.2.1'
 gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.4'
+
 gem 'bootstrap-will_paginate', '0.0.9'
+gem 'bootstrap_form', :git => 'https://github.com/potenza/bootstrap_form'
 
 group :development, :test do
   gem 'database_cleaner'

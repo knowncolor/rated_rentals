@@ -1,29 +1,34 @@
-
-
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h1>Rated Rentals</h1>
-    <p>Real reviews of rental properties &ndash; search by address or landlord</p>
-    <!--<p>Real feedback for rental properties &ndash; see what others are saying before you take the plunge.</p>-->
-    <p><input type="text"  /> <a class="btn btn-primary btn-lg">Search</a></p>
+    <h1>Find Rental Reviews</h1>
+
+    <p>See what others have been saying about rental properties.</p>
+    <%= form_tag({controller: 'reviews', action: 'new'}, method: 'post', class: 'form-inline') do %>
+        <div class="row">
+          <div class="col-xs-10">
+            <label class="sr-only" for="search">Search by street name</label>
+            <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-xl', :placeholder => 'Search by street name', :onFocus => 'geolocate()'} %>
+          </div>
+          <div class="col-xs-2">
+            <%= button_tag "Search", :name => nil, :class => 'btn btn-primary btn-xl' %>
+          </div>
+        </div>
+    <% end %>
   </div>
 </div>
 
 <div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Tenants</h2>
 
-<!-- Example row of columns -->
-<div class="row">
-  <div class="col-md-6">
-    <h2>Tenants</h2>
-    <p>Help out others by sharing your experiences.</p>
-    <p><a class="btn btn-primary" href="#">Add A Review &raquo;</a></p>
-  </div>
-  <div class="col-md-6">
-    <h2>Landlords</h2>
-    <p>Promote your rental properties and see what others are saying about them.</p>
-    <p><a class="btn btn-primary" href="#">More Details &raquo;</a></p>
-  </div>
-</div>
+      <p>Share your experiences and write a review for somewhere you've lived.</p>
 
+      <%= link_to 'Add A Review &raquo;'.html_safe, new_review_path, :class => 'btn btn-primary' %>
+
+          <p></p>
+    </div>
+
+  </div>
 </div>

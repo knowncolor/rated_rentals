@@ -1,18 +1,16 @@
-<div class="navbar navbar-inverse  navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-static-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">RatedRentals</a>
+      <%= link_to "RatedRentals", root_path, :class => 'navbar-brand' %>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li class="active"><%= link_to "Home", root_path %></li>
       </ul>
 
       <ul class="nav navbar-nav pull-right">
-        <li><a href="">My Account</a></li>
+        <li><%= link_to "Account", account_path %></li>
       </ul>
-    </div><!--/.navbar-collapse -->
+    </div>
   </div>
 </div>

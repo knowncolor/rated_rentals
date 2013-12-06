@@ -21,3 +21,8 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    attributes:
+      review:
+        route: "Street"
+        postal_town: "Town or City"
