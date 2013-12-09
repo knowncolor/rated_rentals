@@ -14,3 +14,11 @@
 .field_with_errors {
   @extend .has-error;
 }
+
+#map-container {
+  display: none;
+}
+
+#map-canvas {
+  height: 300px;
+}

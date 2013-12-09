@@ -1,3 +1,9 @@
+<script>
+    function initialize() {
+        $("#address-search").focus();
+    }
+</script>
+
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
@@ -7,7 +13,7 @@
     <%= form_tag({controller: 'reviews', action: 'new'}, method: 'post', class: 'form-inline') do %>
         <div class="row">
           <div class="col-xs-10">
-            <label class="sr-only" for="search">Search by street name</label>
+            <label class="sr-only" for="address-search">Search by street name</label>
             <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-xl', :placeholder => 'Search by street name', :onFocus => 'geolocate()'} %>
           </div>
           <div class="col-xs-2">

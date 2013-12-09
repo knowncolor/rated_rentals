@@ -1,20 +1,35 @@
 <script>
     var autocomplete;
 
+    $(document).ready(function(){
+        $('[data-behavior~=datepicker]').datepicker({
+            startView: 1,
+            todayBtn: "linked",
+            autoclose: true
+        });
+    })
+
     function initialize() {
         // Create the autocomplete object, restricting the search
         // to geographical location types.
         autocomplete = new google.maps.places.Autocomplete(
                 /** @type {HTMLInputElement} */(document.getElementById('address-search')),
                 { types: ['geocode'] });
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             fillInAddress();
+        });
+
+        $("#address-search").focus();
+
+        // precent enter key from submitting the form when choosing an address via autocomplete
+        $('#address-search').keypress(function (event) {
+            return event.keyCode != 13;
         });
     }
 
     function geolocate() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
+            navigator.geolocation.getCurrentPosition(function (position) {
                 var geolocation = new google.maps.LatLng(
                         position.coords.latitude, position.coords.longitude);
                 autocomplete.setBounds(new google.maps.LatLngBounds(geolocation,
@@ -35,11 +50,9 @@
         document.getElementById('review_postal_town').value = "";
         document.getElementById('review_postal_code').value = "";
 
-        var addressLatLong = new google.maps.LatLng(place.geometry.location.ob, place.geometry.location.pb);
-
         // fill in hidden longitude and latitude
-        document.getElementById('review_decimal_degrees_latitude').value = addressLatLong.lat();
-        document.getElementById('review_decimal_degrees_longitude').value = addressLatLong.lng();
+        setLatitude(place.geometry.location.qb);
+        setLongitude(place.geometry.location.pb);
 
         for (var i = 0; i < place.address_components.length; i++) {
             var addressType = place.address_components[i].types[0];
@@ -56,43 +69,67 @@
             }
 
             // town
-            if ( $.inArray(addressType, ['postal_town', 'locality']) > -1 && addressLongName) {
+            if ($.inArray(addressType, ['postal_town', 'locality']) > -1 && addressLongName) {
                 document.getElementById('review_postal_town').value = addressLongName;
             }
 
             // postal_code
-            if ( $.inArray(addressType, ['postal_code', 'postal_code_prefix']) > -1 && addressLongName) {
+            if ($.inArray(addressType, ['postal_code', 'postal_code_prefix']) > -1 && addressLongName) {
                 document.getElementById('review_postal_code').value = addressLongName;
             }
 
             var div = document.getElementById('address');
-            div.innerHTML = div.innerHTML + '<br /> Type:' + addressType + '. Short: ' + place.address_components[i]['short_name'] + '. Long: '  + place.address_components[i]['long_name'];
+            div.innerHTML = div.innerHTML + '<br /> Type:' + addressType + '. Short: ' + place.address_components[i]['short_name'] + '. Long: ' + place.address_components[i]['long_name'];
         }
 
         // center map on new location
         var mapOptions = {
             zoom: 16,
-            center: addressLatLong
+            center: place.geometry.location,
+            streetViewControl: false
         };
+
         map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
 
+        // add the draggable marker
         var marker = new google.maps.Marker({
-            position: addressLatLong,
+            draggable: true,
+            position: place.geometry.location,
+            animation: google.maps.Animation.DROP,
             map: map,
-            title: 'Where you lived!'
+            title: "Where you lived."
         });
 
+        // update update hidden lng and lat fields whenever the marker is dragged
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            setLatitude(this.getPosition().lat());
+            setLongitude(this.getPosition().lng());
+        });
+
+        // show the map div
+        $('#map-container').show()
     }
+
+
+    function setLatitude(latitude) {
+        document.getElementById('review_decimal_degrees_latitude').value = latitude
+    }
+
+    function setLongitude(longitude) {
+        document.getElementById('review_decimal_degrees_longitude').value = longitude
+    }
+
 </script>
 
 <div class='container'>
 
   <h1>Write A Review</h1>
 
-  <p>Tell us about where you lived and what it was like.</p>
-
   <%= form_for @review, url: {action: "create"}, html: {class: 'form-horizontal'} do |f| %>
+
+      <%= f.hidden_field :decimal_degrees_latitude %>
+      <%= f.hidden_field :decimal_degrees_longitude %>
 
       <%= render 'shared/error_messages' %>
 
@@ -138,19 +175,43 @@
           </div>
         </div>
 
-        <%= f.hidden_field :decimal_degrees_latitude %>
-        <%= f.hidden_field :decimal_degrees_longitude %>
+        <div class='form-group' id='map-container'>
+          <label class='col-sm-2 control-label' for="map">Exact Location</label>
 
+          <div class='col-sm-6'>
+            <span class='help-block'>Drag the marker to the right spot.</span>
 
-        <div id="map-canvas" style="height: 300px;"></div>
+            <div id="map-canvas"></div>
+          </div>
+        </div>
 
       </fieldset>
 
 
       <fieldset>
-        <legend>What was it like?</legend>
+        <legend>When did you live there?</legend>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label pull-left' for="review_start_date">Moved In</label>
+
+          <div class='col-sm-2 input-group'>
+            <%= f.text_field :start_date, class: 'form-control', data: { behavior: "datepicker" } %>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label class='col-sm-2 control-label pull-left' for="review_end_date">Moved Out</label>
+
+          <div class='col-sm-2'>
+            <%= f.text_field :end_date, class: 'form-control', :placeholder => 'Still living there' %>
+          </div>
+        </div>
       </fieldset>
 
+      <fieldset>
+        <legend>Some additional details...</legend>
+
+      </fieldset>
 
       <%= button_tag "Save Review", :name => nil, :class => 'btn btn-primary btn-lrg' %>
   <% end %>

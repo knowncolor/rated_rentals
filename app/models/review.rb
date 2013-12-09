@@ -4,5 +4,6 @@ class Review < ActiveRecord::Base
   validates :route, presence: true
   validates :postal_town, presence: true
   validates :postal_code, presence: true
+  validates :start_date, presence: true
 
 end

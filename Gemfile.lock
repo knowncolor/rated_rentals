@@ -1,9 +1,3 @@
-GIT
-  remote: https://github.com/potenza/bootstrap_form
-  revision: 61a1a9d8cf4bd005b8b0ceafcfc04393fbd4757d
-  specs:
-    bootstrap_form (1.0.0)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -37,6 +31,8 @@ GEM
     better_errors (1.0.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
+    bootstrap-datepicker-rails (1.1.1.10)
+      railties (>= 3.0)
     bootstrap-will_paginate (0.0.9)
       will_paginate
     builder (3.1.4)
@@ -210,8 +206,8 @@ PLATFORMS
 DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
   better_errors
+  bootstrap-datepicker-rails
   bootstrap-will_paginate (= 0.0.9)
-  bootstrap_form!
   capybara (= 2.1.0)
   certified
   database_cleaner

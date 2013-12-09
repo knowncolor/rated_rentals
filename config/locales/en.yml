@@ -26,3 +26,4 @@ en:
       review:
         route: "Street"
         postal_town: "Town or City"
+        street_number: "House number"
