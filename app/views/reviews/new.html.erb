@@ -1,17 +1,22 @@
 <script>
     var autocomplete;
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('[data-behavior~=datepicker]').datepicker({
-            startView: 1,
+            startView: 2,
             todayBtn: "linked",
             autoclose: true
         });
-    })
 
-    function initialize() {
-        // Create the autocomplete object, restricting the search
-        // to geographical location types.
+        $("#address-search").focus();
+
+        $('#review_building_rating').slider();
+        $('#review_furnishings_rating').slider();
+        $('#review_noise_rating').slider();
+        $('#review_amenities_rating').slider();
+        $('#review_transport_rating').slider();
+
+        // create the autocomplete object, restricting the search to addresses
         autocomplete = new google.maps.places.Autocomplete(
                 /** @type {HTMLInputElement} */(document.getElementById('address-search')),
                 { types: ['geocode'] });
@@ -19,13 +24,19 @@
             fillInAddress();
         });
 
-        $("#address-search").focus();
-
         // precent enter key from submitting the form when choosing an address via autocomplete
         $('#address-search').keypress(function (event) {
             return event.keyCode != 13;
         });
-    }
+
+        // show map and zoom to location if already present
+        <% if (@review.decimal_degrees_latitude && @review.decimal_degrees_longitude) %>
+            var location = new google.maps.LatLng(<%= @review.decimal_degrees_latitude %>, <%= @review.decimal_degrees_longitude %>);
+            showMap(location, false);
+        <% end %>
+
+
+    })
 
     function geolocate() {
         if (navigator.geolocation) {
@@ -38,8 +49,6 @@
         }
     }
 
-    // The START and END in square brackets define a snippet for our documentation:
-    // [START region_fillform]
     function fillInAddress() {
         // Get the place details from the autocomplete object.
         var place = autocomplete.getPlace();
@@ -51,8 +60,8 @@
         document.getElementById('review_postal_code').value = "";
 
         // fill in hidden longitude and latitude
-        setLatitude(place.geometry.location.qb);
-        setLongitude(place.geometry.location.pb);
+        setLatitude(place.geometry.location.lat());
+        setLongitude(place.geometry.location.lng());
 
         for (var i = 0; i < place.address_components.length; i++) {
             var addressType = place.address_components[i].types[0];
@@ -82,11 +91,16 @@
             div.innerHTML = div.innerHTML + '<br /> Type:' + addressType + '. Short: ' + place.address_components[i]['short_name'] + '. Long: ' + place.address_components[i]['long_name'];
         }
 
-        // center map on new location
+           showMap(place.geometry.location, true);
+    }
+
+    function showMap(location, animate) {
+        // center map on location
         var mapOptions = {
             zoom: 16,
-            center: place.geometry.location,
-            streetViewControl: false
+            center: location,
+            streetViewControl: false,
+            scrollwheel: false,
         };
 
         map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -95,8 +109,8 @@
         // add the draggable marker
         var marker = new google.maps.Marker({
             draggable: true,
-            position: place.geometry.location,
-            animation: google.maps.Animation.DROP,
+            position: location,
+            animation: animate ? google.maps.Animation.DROP: null,
             map: map,
             title: "Where you lived."
         });
@@ -110,7 +124,6 @@
         // show the map div
         $('#map-container').show()
     }
-
 
     function setLatitude(latitude) {
         document.getElementById('review_decimal_degrees_latitude').value = latitude
@@ -138,7 +151,7 @@
         <div class='form-group'>
           <label class="sr-only" for="search">Search for an address</label>
 
-          <div class='col-sm-12'>
+          <div class='col-sm-8'>
             <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-lg', :placeholder => 'Search for an address', :onFocus => 'geolocate()'} %>
           </div>
         </div>
@@ -195,22 +208,98 @@
           <label class='col-sm-2 control-label pull-left' for="review_start_date">Moved In</label>
 
           <div class='col-sm-2 input-group'>
-            <%= f.text_field :start_date, class: 'form-control', data: { behavior: "datepicker" } %>
+            <%= f.text_field :start_date, class: 'form-control', data: {behavior: "datepicker"} %>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
           </div>
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label pull-left' for="review_end_date">Moved Out</label>
 
-          <div class='col-sm-2'>
-            <%= f.text_field :end_date, class: 'form-control', :placeholder => 'Still living there' %>
+          <div class='col-sm-2 input-group'>
+            <%= f.text_field :end_date, class: 'form-control', :placeholder => 'I still live there...', data: {behavior: "datepicker"} %>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
           </div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Some additional details...</legend>
+        <legend>What was it like?</legend>
+        <p>Rate the below aspects of the property from 0 to 10 and add any comments you think will be useful.</p>
 
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_building_rating">The Building</label>
+
+          <div class='col-sm-6'>
+            <%= f.text_field :building_rating, class: 'form-control', data: {:'slider-min' => "0", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.building_rating ||= "5"} %>
+            <span class='help-block'>What is the building like? Think about the entryways, security, lifts and stairways, parking. Any problems with damp or cracks in the walls?</span>
+          </div>
+
+          <label class='sr-only' for="review_building_comments">Building Comments</label>
+
+          <div class='col-sm-6 col-sm-offset-2'>
+            <%= f.text_area :building_comments, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_furnishings_rating">Furnishings</label>
+
+          <div class='col-sm-6'>
+            <%= f.text_field :furnishings_rating, class: 'form-control', data: {:'slider-min' => "0", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.furnishings_rating ||= "5"} %>
+            <span class='help-block'>Think about the furniture, fittings, and finishings. Are the kitchen units nice? Do all the windows work? Are there enough power sockets?</span>
+          </div>
+
+          <label class='sr-only' for="review_furnishings_comments">Furnishings Comments</label>
+
+          <div class='col-sm-6 col-sm-offset-2'>
+            <%= f.text_area :furnishings_comments, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_noise_rating">Noise</label>
+
+          <div class='col-sm-6'>
+            <%= f.text_field :noise_rating, class: 'form-control', data: {:'slider-min' => "0", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.noise_rating ||= "5"} %>
+            <span class='help-block'>Can you hear passing trains, traffic or the nearby school playground? How well insulated are you from the neighbours?</span>
+          </div>
+
+          <label class='sr-only' for="review_noise_comments">Noise Comments</label>
+
+          <div class='col-sm-6 col-sm-offset-2'>
+            <%= f.text_area :noise_comments, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_amenities_rating">Amenities</label>
+
+          <div class='col-sm-6'>
+            <%= f.text_field :amenities_rating, class: 'form-control', data: {:'slider-min' => "0", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.amenities_rating ||= "5"} %>
+            <span class='help-block'>Are there any good supermarkets, parks, coffee shops, gyms, launderettes, etc. nearby?</span>
+          </div>
+
+          <label class='sr-only' for="review_amenities_comments">Amenities Comments</label>
+
+          <div class='col-sm-6 col-sm-offset-2'>
+            <%= f.text_area :amenities_comments, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='col-sm-2 control-label' for="review_transport_rating">Transport</label>
+
+          <div class='col-sm-6'>
+            <%= f.text_field :transport_rating, class: 'form-control', data: {:'slider-min' => "0", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.transport_rating ||= "5"} %>
+            <span class='help-block'>Are there nearby rail and bus services? Is there good bicycle access to the property?</span>
+          </div>
+
+          <label class='sr-only' for="review_transport_comments">Transport Comments</label>
+
+          <div class='col-sm-6 col-sm-offset-2'>
+            <%= f.text_area :transport_comments, class: 'form-control' %>
+          </div>
+        </div>
       </fieldset>
 
       <%= button_tag "Save Review", :name => nil, :class => 'btn btn-primary btn-lrg' %>

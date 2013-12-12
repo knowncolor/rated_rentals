@@ -20,10 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
   activerecord:
     attributes:
       review:
         route: "Street"
-        postal_town: "Town or City"
+        postal_town: "Town or city"
         street_number: "House number"
+        start_date: "Moved in date"
