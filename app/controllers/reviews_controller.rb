@@ -1,11 +1,14 @@
 class ReviewsController < ApplicationController
+  include  ApplicationHelper
 
+  before_filter :ensure_signed_in,
+                :only => [:destroy, :new, :create, :update]
   def create
-
     @review = Review.new(user_params)
 
     if @review.save
-      render 'new'
+      flash[:success] = "Awesome! Thanks for adding a review."
+      redirect_to @review
     else
       render 'new'
     end
@@ -13,6 +16,21 @@ class ReviewsController < ApplicationController
 
   def new
     @review = Review.new
+  end
+
+  def show
+    @review = Review.find(params[:id])
+  end
+
+  def update
+    @review = Review.find(params[:id])
+    @review.update_attributes(user_params)
+
+    if @review.save
+      redirect_to review_path(@review)
+    else
+      render review_path(@review)
+    end
   end
 
   private

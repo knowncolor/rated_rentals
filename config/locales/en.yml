@@ -24,6 +24,8 @@ en:
     attributes:
       review:
         route: "Street"
-        postal_town: "Town or city"
-        street_number: "House number"
-        start_date: "Moved in date"
+        postal_town: "Town or City"
+        street_number: "House Number"
+        start_date: "Moved In date"
+        end_date: "Moved Out date"
+        start_date_before_type_cast: "Moved In date"

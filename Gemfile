@@ -11,15 +11,16 @@ gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.4'
 
 gem 'bootstrap-will_paginate', '0.0.9'
-gem 'bootstrap-datepicker-rails'
-gem 'bootstrap-sass'
+gem 'bootstrap-datepicker-rails', '~> 1.1.1'
+gem 'bootstrap-sass', '~> 3.0.2'
+gem 'bootstrap_form', '2.0.0'
 
 group :development, :test do
-  gem 'database_cleaner'
-  gem 'rspec-rails'
-  gem 'spork-rails'
-  gem 'better_errors'
-  gem 'certified'
+  gem 'database_cleaner', '1.2.0'
+  gem 'rspec-rails', '2.14.0'
+  gem 'spork-rails', '4.0.0'
+  gem 'better_errors', '1.0.1'
+  gem 'certified', '0.1.1'
 end
 
 group :test do
@@ -34,10 +35,10 @@ gem 'jquery-rails', '3.0.4'
 gem 'turbolinks', '1.1.1'
 gem 'jbuilder', '1.0.2'
 
-gem 'figaro'
-gem 'devise'
-gem 'omniauth'
-gem 'omniauth-facebook'
+gem 'figaro', '0.7.0'
+gem 'devise', '3.2.2'
+gem 'omniauth', '1.1.4'
+gem 'omniauth-facebook', '1.5.1'
 
 group :doc do
   gem 'sdoc', '0.3.20', require: false

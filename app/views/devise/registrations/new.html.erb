@@ -9,9 +9,7 @@
       <%= f.password_field :password %>
       <%= f.password_field :password_confirmation %>
       </br>
-      <%= f.actions do %>
-          <%= f.primary 'Create account' %>
-      <% end %>
+      <%= button_tag "Create account", :name => nil, :class => 'btn btn-primary btn-lrg' %>
   <% end %>
 
 </div>

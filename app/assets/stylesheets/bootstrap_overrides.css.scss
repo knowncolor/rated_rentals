@@ -15,14 +15,25 @@
   @extend .has-error;
 }
 
-#map-container {
-  display: none;
-}
-
 #map-canvas {
   height: 300px;
 }
 
 legend {
   padding-top: 0.5em;
+}
+
+.btn-nav{
+  vertical-align: middle;
+  margin: 6px 6px !important;
+  padding: 8px 13px !important;
+}
+
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
 }

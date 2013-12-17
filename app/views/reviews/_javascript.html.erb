@@ -1,0 +1,156 @@
+<script>
+    var autocomplete;
+
+    $(document).ready(function () {
+        $('[data-behavior~=datepicker]').datepicker({
+            startView: 2,
+            todayBtn: "linked",
+            autoclose: true,
+            format: "dd/mm/yyyy"
+        });
+
+        // focus address search if not been used yet
+        if ($('#address-search').val() == '') {
+            $("#address-search").focus();
+        }
+
+        $('#review_building_rating').slider();
+        $('#review_furnishings_rating').slider();
+        $('#review_noise_rating').slider();
+        $('#review_amenities_rating').slider();
+        $('#review_transport_rating').slider();
+
+        // create the autocomplete object, restricting the search to addresses
+        autocomplete = new google.maps.places.Autocomplete(
+                /** @type {HTMLInputElement} */(document.getElementById('address-search')),
+                { types: ['geocode'] });
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            fillInAddress();
+        });
+
+        // prevent enter key from submitting the form when choosing an address via autocomplete
+        $('#address-search').keypress(function (event) {
+            return event.keyCode != 13;
+        });
+
+        // disable or enable address fields depending on whether auto complete location has been picked
+        <% if (@review.decimal_degrees_latitude.blank? && @review.decimal_degrees_longitude.blank?) %>
+            enableAddressControls(false);
+        <% else %>
+            enableAddressControls(true);
+        <% end %>
+
+        // show map and zoom to location if already present
+        <% if (!@review.decimal_degrees_latitude.blank? && !@review.decimal_degrees_longitude.blank?) %>
+            var location = new google.maps.LatLng(<%= @review.decimal_degrees_latitude %>, <%= @review.decimal_degrees_longitude %>);
+            showMap(location, false);
+        <% end %>
+    })
+
+    function enableAddressControls(enabled) {
+        $('#review_street_number').attr('disabled', !enabled);
+        $('#review_route').attr('disabled', !enabled);
+        $('#review_postal_town').attr('disabled', !enabled);
+        $('#review_postal_code').attr('disabled', !enabled);
+        $('#form-group-map').toggle(enabled);
+    }
+
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = new google.maps.LatLng(
+                        position.coords.latitude, position.coords.longitude);
+                autocomplete.setBounds(new google.maps.LatLngBounds(geolocation,
+                        geolocation));
+            });
+        }
+    }
+
+    function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+
+        // clear existing values
+        document.getElementById('review_street_number').value = "";
+        document.getElementById('review_route').value = "";
+        document.getElementById('review_postal_town').value = "";
+        document.getElementById('review_postal_code').value = "";
+
+        // enable form controls
+        enableAddressControls(true);
+
+        // fill in hidden longitude and latitude
+        setLatitude(place.geometry.location.lat());
+        setLongitude(place.geometry.location.lng());
+
+        for (var i = 0; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            var addressLongName = place.address_components[i]['long_name'];
+
+            // street_number
+            if (addressType == 'street_number' && addressLongName) {
+                document.getElementById('review_street_number').value = addressLongName;
+            }
+
+            // street
+            if (addressType == 'route' && addressLongName) {
+                document.getElementById('review_route').value = addressLongName;
+            }
+
+            // town
+            if ($.inArray(addressType, ['postal_town', 'locality']) > -1 && addressLongName) {
+                document.getElementById('review_postal_town').value = addressLongName;
+            }
+
+            // postal_code
+            if ($.inArray(addressType, ['postal_code', 'postal_code_prefix']) > -1 && addressLongName) {
+                document.getElementById('review_postal_code').value = addressLongName;
+            }
+
+            var div = document.getElementById('address');
+            div.innerHTML = div.innerHTML + '<br /> Type:' + addressType + '. Short: ' + place.address_components[i]['short_name'] + '. Long: ' + place.address_components[i]['long_name'];
+        }
+
+        showMap(place.geometry.location, true);
+    }
+
+    function showMap(location, animate) {
+        // center map on location
+        var mapOptions = {
+            zoom: 17,
+            center: location,
+            streetViewControl: false,
+            scrollwheel: false,
+        };
+
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+
+        // add the draggable marker
+        var marker = new google.maps.Marker({
+            draggable: true,
+            position: location,
+            animation: animate ? google.maps.Animation.DROP: null,
+            map: map,
+            title: "Where you lived."
+        });
+
+        // update update hidden lng and lat fields whenever the marker is dragged
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            setLatitude(this.getPosition().lat());
+            setLongitude(this.getPosition().lng());
+        });
+
+        // show the map div
+        $('#map-container').show()
+    }
+
+    function setLatitude(latitude) {
+        document.getElementById('review_decimal_degrees_latitude').value = latitude
+    }
+
+    function setLongitude(longitude) {
+        document.getElementById('review_decimal_degrees_longitude').value = longitude
+    }
+
+</script>

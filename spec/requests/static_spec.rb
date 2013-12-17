@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe "Static" do
+describe "Static pages" do
 
   subject { page }
 
-  describe "loading home page" do
+  describe "root page" do
     before { visit root_path }
 
-    it { should have_content('Rated Rentals') }
+    it { should have_content('Find Rental Reviews') }
   end
 
 

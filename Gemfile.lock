@@ -33,10 +33,11 @@ GEM
       erubis (>= 2.6.6)
     bootstrap-datepicker-rails (1.1.1.10)
       railties (>= 3.0)
-    bootstrap-sass (3.0.2.1)
+    bootstrap-sass (3.0.3.0)
       sass (~> 3.2)
     bootstrap-will_paginate (0.0.9)
       will_paginate
+    bootstrap_form (2.0.0)
     builder (3.1.4)
     capybara (2.1.0)
       mime-types (>= 1.16)
@@ -207,29 +208,30 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
-  better_errors
-  bootstrap-datepicker-rails
-  bootstrap-sass
+  better_errors (= 1.0.1)
+  bootstrap-datepicker-rails (~> 1.1.1)
+  bootstrap-sass (~> 3.0.2)
   bootstrap-will_paginate (= 0.0.9)
+  bootstrap_form (= 2.0.0)
   capybara (= 2.1.0)
-  certified
-  database_cleaner
-  devise
+  certified (= 0.1.1)
+  database_cleaner (= 1.2.0)
+  devise (= 3.2.2)
   factory_girl_rails (= 4.2.1)
   faker (= 1.1.2)
-  figaro
+  figaro (= 0.7.0)
   jbuilder (= 1.0.2)
   jquery-rails (= 3.0.4)
-  omniauth
-  omniauth-facebook
+  omniauth (= 1.1.4)
+  omniauth-facebook (= 1.5.1)
   pg (= 0.15.1)
   rails (= 4.0.2)
   rails_12factor (= 0.0.2)
-  rspec-rails
+  rspec-rails (= 2.14.0)
   sass-rails (= 4.0.0)
   sdoc (= 0.3.20)
   selenium-webdriver (= 2.35.1)
-  spork-rails
+  spork-rails (= 4.0.0)
   turbolinks (= 1.1.1)
   uglifier (= 2.1.1)
   will_paginate (= 3.0.4)
