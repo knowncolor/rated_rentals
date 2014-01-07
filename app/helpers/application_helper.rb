@@ -9,6 +9,16 @@ module ApplicationHelper
     end
   end
 
+  def page_title(title)
+    base_title = "RatedRentals | "
+
+    if !title.empty?
+      base_title + title
+    else
+      base_title + "Property and Landlord Reviews"
+    end
+  end
+
   def ensure_signed_in
     # just here so I don't forget
     if (!user_signed_in?)

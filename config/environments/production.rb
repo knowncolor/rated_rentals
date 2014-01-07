@@ -77,4 +77,16 @@ SampleApp::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  ActionMailer::Base.smtp_settings = {
+      :user_name => ENV['SENDGRID_USERNAME'],
+      :password => ENV['SENDGRID_PASSWORD'],
+      :domain => 'https://shrouded-escarpment-8560.herokuapp.com/',
+      :address => 'smtp.sendgrid.net',
+      :port => 587,
+      :authentication => :plain,
+      :enable_starttls_auto => true
+  }
+
+  Rails.logger = Le.new('4edc6a53-e136-437b-b679-5090fc6b54ef')
 end

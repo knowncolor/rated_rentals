@@ -1,11 +1,22 @@
 class Review < ActiveRecord::Base
-  validate :validate_start_date, :validate_end_date
+  belongs_to :address
+  belongs_to :user
 
-  validates :street_number, presence: true
-  validates :route, presence: true
-  validates :postal_town, presence: true
-  validates :postal_code, presence: true
+  accepts_nested_attributes_for :address
+
+  validate :validate_start_date, :validate_end_date
   validates :start_date_before_type_cast, presence: true
+  validates :address, presence: true
+
+  def formatted_address
+    address_components = ["#{self.address.street_number} #{self.address.route}", self.address.postal_town, self.address.postal_code]
+
+    if (!self.address.flat_number.blank?)
+      address_components.unshift(self.address.flat_number)
+    end
+
+    address_components.join(', ')
+  end
 
   def validate_start_date
     # if the before type cast value is present we know it was not a valid date

@@ -1,7 +1,8 @@
+<% provide(:title, review_title(@review)) %>
 <%= render 'javascript' %>
 
 <div class='container'>
-  <h1>View Review</h1>
+  <h1><%= "#{review_title(@review)} by #{@review.user.name}" %></h1>
 
   <%= render 'review_form' %>
 </div>

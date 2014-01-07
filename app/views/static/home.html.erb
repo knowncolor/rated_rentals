@@ -1,27 +1,18 @@
-<script>
-    function initialize() {
-        $("#address-search").focus();
-    }
-</script>
-
-<!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
-  <div class="container">
-    <h1>Find Rental Reviews</h1>
+  <h1>Find Rental Reviews</h1>
 
-    <p>See what others have been saying about rental properties.</p>
-    <%= form_tag({controller: 'reviews', action: 'new'}, method: 'post', class: 'form-inline') do %>
-        <div class="row">
-          <div class="col-xs-10">
-            <label class="sr-only" for="address-search">Search by street name</label>
-            <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-xl', :placeholder => 'Search by street name', :onFocus => 'geolocate()'} %>
-          </div>
-          <div class="col-xs-2">
-            <%= button_tag "Search", :name => nil, :class => 'btn btn-primary btn-xl' %>
-          </div>
+  <p>See what others have been saying about rental properties.</p>
+  <%= form_tag({controller: 'reviews', action: 'new'}, method: 'post', class: 'form-inline') do %>
+      <div class="row">
+        <div class="col-xs-10">
+          <label class="sr-only" for="address-search">Search by street name</label>
+          <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-xl', :placeholder => 'Search by street name', :autofocus => true, :onFocus => 'geolocate()'} %>
         </div>
-    <% end %>
-  </div>
+        <div class="col-xs-2">
+          <%= button_tag "Search", :name => nil, :class => 'btn btn-primary btn-xl' %>
+        </div>
+      </div>
+  <% end %>
 </div>
 
 <div class="container">
@@ -33,7 +24,7 @@
 
       <%= link_to 'Add A Review &raquo;'.html_safe, new_review_path, :class => 'btn btn-primary' %>
 
-          <p></p>
+      <p></p>
     </div>
 
   </div>

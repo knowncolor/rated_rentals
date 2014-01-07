@@ -2,12 +2,6 @@
 
 FactoryGirl.define do
   factory :review do
-    street_number "MyString"
-    route "MyString"
-    postal_town "MyString"
-    postal_code "MyString"
-    decimal_degrees_latitude 52.12123
-    decimal_degrees_longitude 4.12123
     start_date "03/04/2013"
     end_date "03/04/2015"
     building_rating 5
@@ -20,5 +14,6 @@ FactoryGirl.define do
     amenities_comments "amenities comments"
     transport_rating 9
     transport_comments "transport comments"
+    association :address, factory: :address
   end
 end

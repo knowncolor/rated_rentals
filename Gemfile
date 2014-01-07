@@ -9,6 +9,7 @@ gem 'rails_12factor', '0.0.2'
 gem 'factory_girl_rails', '4.2.1'
 gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.4'
+gem 'le'
 
 gem 'bootstrap-will_paginate', '0.0.9'
 gem 'bootstrap-datepicker-rails', '~> 1.1.1'
@@ -39,6 +40,7 @@ gem 'figaro', '0.7.0'
 gem 'devise', '3.2.2'
 gem 'omniauth', '1.1.4'
 gem 'omniauth-facebook', '1.5.1'
+gem 'omniauth-google-oauth2', '~> 0.2'
 
 group :doc do
   gem 'sdoc', '0.3.20', require: false

@@ -1,12 +1,14 @@
 require 'spec_helper'
+include ReviewsHelper
 
 describe "Review create and edit pages" do
 
   subject { page }
+  let(:user) { FactoryGirl.create(:user) }
 
   describe "new review page" do
     before do
-      valid_signin
+      valid_signin user
       visit new_review_path
     end
 
@@ -15,7 +17,7 @@ describe "Review create and edit pages" do
 
   describe "create a new review" do
     before do
-      valid_signin
+      valid_signin user
       visit new_review_path
     end
 
@@ -64,23 +66,23 @@ describe "Review create and edit pages" do
 
     describe "with valid information" do
       before do
-        fill_in "House Number",  with: "75"
-        fill_in "Street",        with: "Whipps Cross Rd"
-        fill_in "Town or City",  with: "London"
-        fill_in "Postal Code",   with: "E11 1NJ"
-        fill_in "Moved In",      with: "02/02/2010"
+        fill_in 'review_address_attributes_street_number', with: "75"
+        fill_in 'review_address_attributes_route', with: "Whipps Cross Rd"
+        fill_in 'review_address_attributes_postal_town', with: "London"
+        fill_in 'review_address_attributes_postal_code', with: "E11 1NJ"
+        fill_in 'review_start_date', with: "02/02/2011"
       end
 
       it "should create a review" do
         expect { click_button submit }.to change(Review, :count).by(1)
       end
 
-      describe "after saving the review" do
-        before { click_button submit }
-        let(:review) { Review.find_by(start_date: "02/02/2010") }
-
-        it { should have_content('View Review') }
+      it "should have an associated user_id" do
+        click_button submit
+        expect(Review.last.user_id).to eq user.id
       end
     end
   end
+
+  # do edit scenarios
 end

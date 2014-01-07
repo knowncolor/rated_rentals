@@ -29,4 +29,12 @@ SampleApp::Application.configure do
 
   # Speed up tests by lowering bcrypt's cost function.
   ActiveModel::SecurePassword.min_cost = true
+
+  # ActionMailer config
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {:address => "localhost", :port => 1025}
+
+  Rails.logger = Le.new('4edc6a53-e136-437b-b679-5090fc6b54ef', debug: true)
 end

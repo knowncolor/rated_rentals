@@ -34,24 +34,25 @@
         });
 
         // disable or enable address fields depending on whether auto complete location has been picked
-        <% if (@review.decimal_degrees_latitude.blank? && @review.decimal_degrees_longitude.blank?) %>
-            enableAddressControls(false);
+        <% if (@review.address.decimal_degrees_latitude.blank?) %>
+            //enableAddressControls(false);
         <% else %>
-            enableAddressControls(true);
+            //enableAddressControls(true);
         <% end %>
 
         // show map and zoom to location if already present
-        <% if (!@review.decimal_degrees_latitude.blank? && !@review.decimal_degrees_longitude.blank?) %>
-            var location = new google.maps.LatLng(<%= @review.decimal_degrees_latitude %>, <%= @review.decimal_degrees_longitude %>);
+        <% if (!@review.address.decimal_degrees_latitude.blank?) %>
+            var location = new google.maps.LatLng(<%= @review.address.decimal_degrees_latitude %>, <%= @review.address.decimal_degrees_longitude %>);
             showMap(location, false);
         <% end %>
     })
 
     function enableAddressControls(enabled) {
-        $('#review_street_number').attr('disabled', !enabled);
-        $('#review_route').attr('disabled', !enabled);
-        $('#review_postal_town').attr('disabled', !enabled);
-        $('#review_postal_code').attr('disabled', !enabled);
+        $('#review_address_attributes_flat_number').attr('disabled', !enabled);
+        $('#review_address_attributes_street_number').attr('disabled', !enabled);
+        $('#review_address_attributes_route').attr('disabled', !enabled);
+        $('#review_address_attributes_postal_town').attr('disabled', !enabled);
+        $('#review_address_attributes_postal_code').attr('disabled', !enabled);
         $('#form-group-map').toggle(enabled);
     }
 
@@ -71,10 +72,11 @@
         var place = autocomplete.getPlace();
 
         // clear existing values
-        document.getElementById('review_street_number').value = "";
-        document.getElementById('review_route').value = "";
-        document.getElementById('review_postal_town').value = "";
-        document.getElementById('review_postal_code').value = "";
+        document.getElementById('review_address_attributes_flat_number').value = "";
+        document.getElementById('review_address_attributes_street_number').value = "";
+        document.getElementById('review_address_attributes_route').value = "";
+        document.getElementById('review_address_attributes_postal_town').value = "";
+        document.getElementById('review_address_attributes_postal_code').value = "";
 
         // enable form controls
         enableAddressControls(true);
@@ -89,22 +91,27 @@
 
             // street_number
             if (addressType == 'street_number' && addressLongName) {
-                document.getElementById('review_street_number').value = addressLongName;
+                document.getElementById('review_address_attributes_street_number').value = addressLongName;
             }
 
             // street
             if (addressType == 'route' && addressLongName) {
-                document.getElementById('review_route').value = addressLongName;
+                document.getElementById('review_address_attributes_route').value = addressLongName;
             }
 
             // town
             if ($.inArray(addressType, ['postal_town', 'locality']) > -1 && addressLongName) {
-                document.getElementById('review_postal_town').value = addressLongName;
+                document.getElementById('review_address_attributes_postal_town').value = addressLongName;
             }
 
             // postal_code
             if ($.inArray(addressType, ['postal_code', 'postal_code_prefix']) > -1 && addressLongName) {
-                document.getElementById('review_postal_code').value = addressLongName;
+                document.getElementById('review_address_attributes_postal_code').value = addressLongName;
+            }
+
+            // postal_code
+            if (addressType == 'route' && addressLongName) {
+                document.getElementById('review_address_attributes_country').value = addressLongName;
             }
 
             var div = document.getElementById('address');
@@ -117,10 +124,11 @@
     function showMap(location, animate) {
         // center map on location
         var mapOptions = {
-            zoom: 17,
+            zoom: 18,
             center: location,
             streetViewControl: false,
             scrollwheel: false,
+            mapTypeId: google.maps.MapTypeId.HYBRID
         };
 
         map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -146,11 +154,11 @@
     }
 
     function setLatitude(latitude) {
-        document.getElementById('review_decimal_degrees_latitude').value = latitude
+        document.getElementById('review_address_attributes_decimal_degrees_latitude').value = latitude
     }
 
     function setLongitude(longitude) {
-        document.getElementById('review_decimal_degrees_longitude').value = longitude
+        document.getElementById('review_address_attributes_decimal_degrees_longitude').value = longitude
     }
 
 </script>

@@ -6,8 +6,19 @@
       <%= f.alert_message "Please fix the errors below." %>
 
       <%= f.text_field :email, :autofocus => true %>
+      <%= f.text_field :name, label: 'Username (this will appear to others on the site)' %>
       <%= f.password_field :password %>
       <%= f.password_field :password_confirmation %>
+
+      <div class='form-group'>
+        <label for="human_test">1+2 = ?</label>
+
+        <div>
+          <%= text_field_tag 'human_test', nil, class: 'form-control' %>
+          <span class='help-block'>This lets us know that you are a real person and not a spam bot.</span>
+        </div>
+      </div>
+
       </br>
       <%= button_tag "Create account", :name => nil, :class => 'btn btn-primary btn-lrg' %>
   <% end %>

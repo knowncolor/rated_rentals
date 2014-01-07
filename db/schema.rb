@@ -11,18 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131212123403) do
+ActiveRecord::Schema.define(version: 20140103144401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "reviews", force: true do |t|
+  create_table "addresses", force: true do |t|
     t.string   "street_number"
     t.string   "route"
     t.string   "postal_town"
     t.string   "postal_code"
+    t.string   "country"
     t.string   "decimal_degrees_latitude"
     t.string   "decimal_degrees_longitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "flat_number"
+  end
+
+  add_index "addresses", ["postal_code", "route", "street_number"], name: "index_addresses_on_postal_code_and_route_and_street_number", using: :btree
+
+  create_table "reviews", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "start_date"
@@ -37,6 +46,8 @@ ActiveRecord::Schema.define(version: 20131212123403) do
     t.string   "noise_comments"
     t.string   "amenities_comments"
     t.string   "transport_comments"
+    t.integer  "address_id"
+    t.integer  "user_id"
   end
 
   create_table "users", force: true do |t|
@@ -58,6 +69,7 @@ ActiveRecord::Schema.define(version: 20131212123403) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["name"], name: "index_users_on_name", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end
