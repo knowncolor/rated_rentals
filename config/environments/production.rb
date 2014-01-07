@@ -88,5 +88,8 @@ SampleApp::Application.configure do
       :enable_starttls_auto => true
   }
 
+  ActionMailer::Base.delivery_method = :smtp
+  config.action_mailer.default_url_options = { :host => 'https://shrouded-escarpment-8560.herokuapp.com' }
+
   Rails.logger = Le.new('4edc6a53-e136-437b-b679-5090fc6b54ef')
 end
