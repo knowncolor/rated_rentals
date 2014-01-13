@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include Devise::TestHelpers
+
 describe ReviewsController do
 
   describe "GET #show" do
@@ -17,10 +19,7 @@ describe ReviewsController do
 
   describe "POST create" do
     before do
-      @user = User.new(:email => "example@example.com", :password => 'password', :password_confirmation => 'password')
-      @user.save
-
-      sign_in @user
+      sign_in FactoryGirl.create(:user)
     end
 
     context "with valid attributes" do
@@ -81,7 +80,7 @@ describe ReviewsController do
       end
     end
 
-    context "wtith an address which doesnt match an existing one" do
+    context "with an address which doesnt match an existing one" do
       it "doesnt match on flat number" do
         expect {
           FactoryGirl.create(:address, flat_number: "new flat number")

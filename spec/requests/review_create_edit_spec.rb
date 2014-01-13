@@ -30,7 +30,7 @@ describe "Review create and edit pages" do
 
       it "should show validation error messages" do
         click_button submit
-        should have_content('The form contains')
+        should have_content('Please fix the')
       end
     end
 
@@ -40,8 +40,8 @@ describe "Review create and edit pages" do
         fill_in "Moved Out",      with: "fkjdgfd"
         click_button submit
 
-        should have_selector('li', text: 'Moved In date is invalid')
-        should have_selector('li', text: 'Moved Out date is invalid')
+        should have_selector('li', text: 'Moved In Date is invalid')
+        should have_selector('li', text: 'Moved Out Date is invalid')
       end
     end
 
@@ -50,7 +50,7 @@ describe "Review create and edit pages" do
         fill_in "Moved In",      with: "02/02/2100"
         click_button submit
 
-        should have_selector('li', text: 'Moved In date cannot be in the future')
+        should have_selector('li', text: 'Moved In Date cannot be in the future')
       end
     end
 
@@ -60,7 +60,7 @@ describe "Review create and edit pages" do
         fill_in "Moved Out",      with: "02/02/2010"
         click_button submit
 
-        should have_selector('li', text: 'Moved Out date can\'t be before the Moved In date')
+        should have_selector('li', text: 'Moved Out Date can\'t be before the Moved In date')
       end
     end
 

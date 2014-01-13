@@ -1,8 +1,8 @@
-<% if @review.errors.any? %>
+<% if record.errors.any? %>
     <div class="alert alert-danger">
-        <strong>The form contains <%= pluralize(@review.errors.count, "error") %>:</strong>
+      <strong>Please fix the <%= pluralize(record.errors.count, "error") %> below:</strong>
       <ul>
-        <% @review.errors.full_messages.each do |msg| %>
+        <% record.errors.full_messages.each do |msg| %>
             <li><%= msg %></li>
         <% end %>
       </ul>

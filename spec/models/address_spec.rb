@@ -39,6 +39,22 @@ describe Address do
     it { should_not be_valid }
   end
 
+  describe "formatted address" do
+    it "should combine the flat, house, street, town, and postcode" do
+      expect(@address.formatted_address).to eq "#{@address.flat_number}, #{@address.street_number} #{@address.route}, #{@address.postal_town}, #{@address.postal_code}"
+    end
+
+    it "should combine the house, street, town, and postcode if flat not present" do
+      @address.flat_number = nil
+      expect(@address.formatted_address).to eq "#{@address.street_number} #{@address.route}, #{@address.postal_town}, #{@address.postal_code}"
+    end
+
+    it "should combine the house, street, town, and postcode if flat is blank" do
+      @address.flat_number = ''
+      expect(@address.formatted_address).to eq "#{@address.street_number} #{@address.route}, #{@address.postal_town}, #{@address.postal_code}"
+    end
+  end
+
   describe "reviews association" do
     let(:review1) { FactoryGirl.create(:review) }
     let(:review2) { FactoryGirl.create(:review) }

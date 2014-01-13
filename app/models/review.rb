@@ -8,14 +8,12 @@ class Review < ActiveRecord::Base
   validates :start_date_before_type_cast, presence: true
   validates :address, presence: true
 
-  def formatted_address
-    address_components = ["#{self.address.street_number} #{self.address.route}", self.address.postal_town, self.address.postal_code]
-
-    if (!self.address.flat_number.blank?)
-      address_components.unshift(self.address.flat_number)
-    end
-
-    address_components.join(', ')
+  def descriptions_word_count
+    building_comments.split.size +
+        furnishings_comments.split.size +
+        noise_comments.split.size +
+        amenities_comments.split.size +
+        transport_comments.split.size
   end
 
   def validate_start_date

@@ -55,6 +55,12 @@ describe Review do
     end
   end
 
+  describe "review word count" do
+    it "should be the count of all the desciptions" do
+      expect(@review.descriptions_word_count).to eq 10
+    end
+  end
+
   describe "user association" do
     let(:user) { FactoryGirl.create(:user) }
 
@@ -63,22 +69,6 @@ describe Review do
       @review.save
 
       expect(@review.reload.user.id).to eq user.id
-    end
-  end
-
-  describe "formatted address" do
-    it "should combine the flat, house, street, town, and postcode" do
-      expect(@review.formatted_address).to eq "#{@review.address.flat_number}, #{@review.address.street_number} #{@review.address.route}, #{@review.address.postal_town}, #{@review.address.postal_code}"
-    end
-
-    it "should combine the house, street, town, and postcode if flat not present" do
-      @review.address.flat_number = nil
-      expect(@review.formatted_address).to eq "#{@review.address.street_number} #{@review.address.route}, #{@review.address.postal_town}, #{@review.address.postal_code}"
-    end
-
-    it "should combine the house, street, town, and postcode if flat is blank" do
-      @review.address.flat_number = ''
-      expect(@review.formatted_address).to eq "#{@review.address.street_number} #{@review.address.route}, #{@review.address.postal_town}, #{@review.address.postal_code}"
     end
   end
 end

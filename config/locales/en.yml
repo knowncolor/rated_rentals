@@ -22,10 +22,23 @@
 en:
   activerecord:
     attributes:
-      review:
+      address:
+        flat_number: "Flat"
         route: "Street"
         postal_town: "Town or City"
         street_number: "House Number"
-        start_date: "Moved In date"
-        end_date: "Moved Out date"
-        start_date_before_type_cast: "Moved In date"
+
+      review:
+        start_date: "Moved In Date"
+        end_date: "Moved Out Date"
+        start_date_before_type_cast: "Moved In Date"
+        building_rating: "The Building"
+        building_comments: "Building Comments"
+        furnishings_rating: "Furnishings"
+        furnishings_comments: "Furnishings Comments"
+        noise_rating: "Noise"
+        noise_comments: "Noise Comments"
+        amenities_rating: "Amenities"
+        amenities_comments: "Amenities Comments"
+        transport_rating: "Transport"
+        transport_comments: "Transport Comments"

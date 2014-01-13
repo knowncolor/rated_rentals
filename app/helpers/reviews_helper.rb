@@ -1,5 +1,5 @@
 module ReviewsHelper
   def review_title(review)
-    "Review of #{review.formatted_address}"
+    "Review of #{review.address.formatted_address}"
   end
 end

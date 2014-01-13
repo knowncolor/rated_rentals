@@ -1,12 +1,20 @@
 SampleApp::Application.routes.draw do
 
-  devise_for :users, :path => '', :path_names => {:sign_in => 'sign-in', :sign_out => 'sign-out'}, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  devise_for :users,
+             :path => '',
+             :path_names => {:sign_in => 'sign-in',
+                             :sign_out => 'sign-out',
+                             :registration => 'account',
+                             :edit => 'edit' },
+             :controllers => { :omniauth_callbacks => "users/omniauth_callbacks",
+                               :registrations => "users/registrations" }
 
   root 'static#home'
 
   get '/account', to: 'users#show', as: 'account'
 
   resources :reviews, only: [:new, :create, :show, :update]
+  resources :users, only: [:show, :index]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

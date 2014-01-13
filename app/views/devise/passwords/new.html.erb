@@ -1,14 +1,9 @@
 <div class="container">
   <h2>Forgot your password?</h2>
 
-  <%= form_for resource, :as => resource_name, :url => password_path(resource_name) do |f| %>
-      <%= devise_error_messages! %>
-
-      <div class='form-group'>
-        <%= f.label :email, class: "sr-only" %>
-        <%= f.text_field :email, :autofocus => true, class: 'form-control', placeholder: "email address" %>
-      </div>
-
+  <%= bootstrap_form_for resource, :as => resource_name, :url => password_path(resource_name) do |f| %>
+      <%= f.text_field :email, :autofocus => true, hide_label: true, placeholder: "email address" %>
       <%= button_tag "Send me password reset instructions", :name => nil, :class => 'btn btn-primary btn-lg' %>
   <% end %>
+
 </div>

@@ -7,7 +7,7 @@ class ReviewsController < ApplicationController
   def create
     @review = Review.new(user_params)
 
-    # if the review isnt valid don't do any existing address lookup just yet
+    # if the review isnt valid don't do any existing address lookup
     if !@review.valid?
       render 'new'
       return

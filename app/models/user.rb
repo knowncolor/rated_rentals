@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable,
          :validatable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
 
+  def password_required?
+    super && provider.blank?
+  end
+
   def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
     user = User.find_by_email(auth.info.email)
 

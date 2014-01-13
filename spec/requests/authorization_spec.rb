@@ -27,10 +27,5 @@ describe 'authorization required pages' do
       before { put review_path(:review) }
       specify { expect(response).to redirect_to(new_user_session_path) }
     end
-
-    describe "accessing users#show" do
-      before { visit account_path }
-      it { should require_login }
-    end
   end
 end

@@ -1,2 +1,58 @@
 <% provide(:title, 'Your Account & Reviews'.html_safe) %>
-<h2>Users Show</h2>
+<h1>
+  <strong><%= @user.name %></strong>
+  <span class="pull-right small">Member since <strong><%= @user.created_at.to_formatted_s(:day_month_year) %></strong></span>
+</h1>
+
+<% if @user.reviews.size == 0 %>
+    <h2>
+      <% if @user.id == current_user.id %>
+          <small>You haven't written any reviews yet, why
+            not <%= link_to 'add a review now.'.html_safe, new_review_path %> </small>
+      <% else %>
+          <small>This user has not written any reviews yet.</small>
+      <% end %>
+    </h2>
+<% else %>
+    <h2>Reviews</h2>
+
+    <ol class="reviews">
+      <% @user.reviews.each do |r| %>
+          <li>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <strong><%= r.address.formatted_address %></strong>
+              </div>
+              <div class="panel-body">
+                <ul class="scores">
+                  <li>
+                    <span class="category heat<%= r.noise_rating %>>">Noise</span>
+                    <span class="score"><%= r.noise_rating %></span>
+                  </li>
+
+                  <li>
+                    <span class="category heat<%= r.building_rating %>">Building</span>
+                    <span class="score"><%= r.building_rating %></span>
+                  </li>
+
+                  <li>
+                    <span class="category heat8">Furnishings</span>
+                    <span class="score">8</span>
+                  </li>
+
+                  <li>
+                    <span class="category heat9">Amenities</span>
+                    <span class="score">9</span>
+                  </li>
+
+                  <li>
+                    <span class="category heat10">Transport<span class="score">10</span></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+      <% end %>
+    </ol>
+
+<% end %>

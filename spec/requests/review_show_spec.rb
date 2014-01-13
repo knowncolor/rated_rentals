@@ -10,6 +10,8 @@ describe "Review show pages" do
       @user = valid_signin
       @review = FactoryGirl.create(:review)
       @review.user = @user
+      @review.save
+
       visit review_path @review
     end
 

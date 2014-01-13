@@ -41,3 +41,101 @@ body {
 form {
   margin-bottom: 15px;
 }
+
+h1 {
+  border-bottom: 1px dotted;
+  padding-bottom: 5px;
+}
+
+h2 {
+  border-bottom: 1px dotted;
+}
+
+ol.reviews {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ol.reviews .panel-body {
+  padding: 0;
+}
+
+.scores {
+  margin: 0;
+  padding: 0;
+}
+
+.scores li {
+  display:block;
+  color:#999;
+  background:#ececec;
+  border-bottom: 1px solid;
+}
+
+.scores .category {
+  padding: 1px 0 1px 5px;
+  display: inline-block;
+  color: #fff;
+}
+
+.scores .score {
+  float: right;
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.heat0 {
+  width: 10%;
+}
+
+.heat1 {
+  background:#E7040C;
+  width: 10%;
+}
+
+.heat2 {
+  background:#E22F06;
+  width: 20%;
+}
+
+.heat3 {
+  background:#DD5E08;
+  width: 30%;
+}
+
+.heat4 {
+  background:#D98B0A;
+  width: 40%;
+}
+
+.heat5 {
+  background:#D4B50C;
+  width: 50%;
+}
+
+.heat6 {
+  background:#C2CF0D;
+  width: 60%;
+}
+
+.heat7 {
+  background:#94CB0F;
+  width: 70%;
+}
+
+.heat8 {
+  background:#69C611;
+  width: 80%;
+}
+
+.heat9 {
+  background:#41C112;
+  width: 90%;
+}
+
+.heat10 {
+  background:#1CBD13;
+  width: 100%;
+}
+
