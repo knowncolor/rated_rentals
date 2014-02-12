@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe User do
   before do
-    @user = FactoryGirl.create(:user)
+    @user = create_user()
   end
 
   subject { @user }
@@ -101,15 +101,15 @@ describe User do
 
     describe "for an existing user" do
       it "should not create a new user" do
-        user = User.find_for_facebook_oauth(auth, nil)
-        user = User.find_for_facebook_oauth(auth, nil)
+        User.find_for_facebook_oauth(auth, nil)
+        User.find_for_facebook_oauth(auth, nil)
         expect(User.where(:provider => auth.provider).size).to eq 1
       end
 
       it "should match different cased email" do
-        user = User.find_for_facebook_oauth(auth, nil)
+        User.find_for_facebook_oauth(auth, nil)
         auth.info.email = "FACEBOOK@KNOWNCOLOR.COM"
-        user = User.find_for_facebook_oauth(auth, nil)
+        User.find_for_facebook_oauth(auth, nil)
         expect(User.where(:provider => auth.provider).size).to eq 1
       end
     end
@@ -144,26 +144,24 @@ describe User do
 
     describe "for an existing user" do
       it "should not create a new user" do
-        user = User.find_for_google_oauth2(auth, nil)
-        user = User.find_for_google_oauth2(auth, nil)
+        User.find_for_google_oauth2(auth, nil)
+        User.find_for_google_oauth2(auth, nil)
         expect(User.where(:provider => auth.provider).size).to eq 1
       end
 
       it "should match different cased email" do
-        user = User.find_for_google_oauth2(auth, nil)
+        User.find_for_google_oauth2(auth, nil)
         auth.info.email = "JAMES.O.ADAMS@GMAIL.COM"
-        user = User.find_for_google_oauth2(auth, nil)
+        User.find_for_google_oauth2(auth, nil)
         expect(User.where(:provider => auth.provider).size).to eq 1
       end
     end
   end
 
-
   describe "reviews association" do
-    let(:review1) { FactoryGirl.create(:review) }
-    let(:review2) { FactoryGirl.create(:review) }
-
     it "should be settable and retrievable" do
+      review1 = create_review()
+      review2 = create_review()
       @user.reviews << review1
       @user.reviews << review2
       @user.save

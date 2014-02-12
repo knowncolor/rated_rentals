@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Address do
   before do
-    @address = FactoryGirl.create(:address)
+    @address = create_address()
   end
 
   subject { @address }
@@ -17,6 +17,8 @@ describe Address do
   it { should respond_to(:country) }
   it { should respond_to(:decimal_degrees_latitude) }
   it { should respond_to(:decimal_degrees_longitude) }
+  it { should respond_to(:created_at) }
+  it { should respond_to(:updated_at) }
   it { should be_valid }
 
   describe "when street number is not present" do
@@ -40,26 +42,30 @@ describe Address do
   end
 
   describe "formatted address" do
-    it "should combine the flat, house, street, town, and postcode" do
-      expect(@address.formatted_address).to eq "#{@address.flat_number}, #{@address.street_number} #{@address.route}, #{@address.postal_town}, #{@address.postal_code}"
+    it "should combine the flat (formatted as 'Flat X'), house, street, and town" do
+      expect(@address.formatted_address).to eq "Flat #{@address.flat_number}, #{@address.street_number} #{@address.route}, #{@address.postal_town}".titleize
     end
 
-    it "should combine the house, street, town, and postcode if flat not present" do
+    it "should combine the house, street, and town if flat not present" do
       @address.flat_number = nil
-      expect(@address.formatted_address).to eq "#{@address.street_number} #{@address.route}, #{@address.postal_town}, #{@address.postal_code}"
+      expect(@address.formatted_address).to eq "#{@address.street_number} #{@address.route}, #{@address.postal_town}".titleize
     end
 
-    it "should combine the house, street, town, and postcode if flat is blank" do
+    it "should combine the house, street, and town, if flat is blank" do
       @address.flat_number = ''
-      expect(@address.formatted_address).to eq "#{@address.street_number} #{@address.route}, #{@address.postal_town}, #{@address.postal_code}"
+      expect(@address.formatted_address).to eq "#{@address.street_number} #{@address.route}, #{@address.postal_town}".titleize
+    end
+
+    it "should not add an extra 'Flat' string if already present" do
+      @address.flat_number = 'Flat A'
+      expect(@address.formatted_address).to eq "#{@address.flat_number}, #{@address.street_number} #{@address.route}, #{@address.postal_town}".titleize
     end
   end
 
   describe "reviews association" do
-    let(:review1) { FactoryGirl.create(:review) }
-    let(:review2) { FactoryGirl.create(:review) }
-
     it "should be settable and retrievable" do
+      review1 = create_review()
+      review2 = create_review()
       @address.reviews << review1
       @address.reviews << review2
       @address.save

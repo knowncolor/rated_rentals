@@ -1,0 +1,38 @@
+<script>
+    var autocomplete;
+
+    $(document).ready(function () {
+        // focus address search if not been used yet
+        if ($('#address-search').val() == '') {
+            $("#address-search").focus();
+        }
+
+        // create the autocomplete object, restricting the search to addresses
+        autocomplete = new google.maps.places.Autocomplete(
+                /** @type {HTMLInputElement} */(document.getElementById('address-search')),
+                { types: ['geocode'] });
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            map.setCenter(autocomplete.getPlace().geometry.location);
+            map.setZoom(17)
+        });
+
+        // center map on location
+        var mapOptions = {
+            zoom: 12,
+            streetViewControl: false,
+            scrollwheel: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = new google.maps.LatLng(
+                        position.coords.latitude, position.coords.longitude);
+                map.setCenter(geolocation);
+            });
+        }
+    })
+</script>

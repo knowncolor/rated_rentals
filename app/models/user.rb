@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include ValidationLogger
 
   validates_presence_of :name
   validates_uniqueness_of :name

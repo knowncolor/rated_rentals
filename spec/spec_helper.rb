@@ -102,14 +102,9 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
+  Faker::Config.locale = :en
 
   config.include Capybara::DSL
-end
-
-def build_attributes(*args)
-  FactoryGirl.build(*args).attributes.delete_if do |k, v|
-    ["id", "created_at", "updated_at"].member?(k)
-  end
 end
 
 # Use: it { should accept_nested_attributes_for(:association_name).and_accept({valid_values => true}).but_reject({ :reject_if_nil => nil })}

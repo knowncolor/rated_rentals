@@ -1,4 +1,5 @@
 class Address < ActiveRecord::Base
+  include ValidationLogger
 
   has_many :reviews
 
@@ -8,12 +9,18 @@ class Address < ActiveRecord::Base
   validates :postal_code, presence: true
 
   def formatted_address
-    address_components = ["#{self.street_number} #{self.route}", self.postal_town, self.postal_code]
+    address_components = ["#{self.street_number} #{self.route}", self.postal_town]
 
     if (!self.flat_number.blank?)
-      address_components.unshift(self.flat_number)
+      if self.flat_number.downcase.include? "flat"
+        flat_description = self.flat_number
+      else
+        flat_description = "Flat #{self.flat_number}"
+      end
+
+      address_components.unshift(flat_description)
     end
 
-    address_components.join(', ')
+    address_components.join(', ').titleize
   end
 end

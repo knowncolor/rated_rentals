@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Review do
   before do
-    @review = FactoryGirl.create(:review)
+    @review = create_review()
   end
 
   subject { @review }
@@ -20,6 +20,8 @@ describe Review do
   it { should respond_to(:amenities_comments) }
   it { should respond_to(:transport_rating) }
   it { should respond_to(:transport_comments) }
+  it { should respond_to(:created_at) }
+  it { should respond_to(:updated_at) }
 
   describe "validations" do
     describe "when start_date is not present" do
@@ -31,10 +33,60 @@ describe Review do
       before { @review.address = nil }
       it { should_not be_valid }
     end
+
+    describe "when user is not present" do
+      before { @review.user = nil }
+      it { should_not be_valid }
+    end
+
+    describe "ratings must be between 1..10" do
+      context "ratings too low" do
+        before do
+          @review.building_rating = -1
+          @review.furnishings_rating = -1
+          @review.noise_rating = -0
+          @review.amenities_rating = -100
+          @review.transport_rating = -1
+          @review.valid?
+        end
+
+        it "should have 5 validation errors" do
+          expect(@review.errors.size).to eq 5
+        end
+      end
+
+      context "ratings too high" do
+        before do
+          @review.building_rating = 11
+          @review.furnishings_rating = 11
+          @review.noise_rating = 100
+          @review.amenities_rating = 11
+          @review.transport_rating = 11
+          @review.valid?
+        end
+
+        it "should have 5 validation errors" do
+          expect(@review.errors.size).to eq 5
+        end
+      end
+
+      context "ratings just right" do
+        before do
+          @review.building_rating = 1
+          @review.furnishings_rating = 1
+          @review.noise_rating = 10
+          @review.amenities_rating = 1
+          @review.transport_rating = 1
+          @review.valid?
+        end
+
+        it { should be_valid }
+      end
+    end
   end
 
   describe "address association" do
-    let(:address) { FactoryGirl.create(:address) }
+    let(:address) { create_address() }
 
     it "should be settable and retrievable" do
       @review.address = address
@@ -62,7 +114,7 @@ describe Review do
   end
 
   describe "user association" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { create_user() }
 
     it "should be settable and retrievable" do
       @review.user = user

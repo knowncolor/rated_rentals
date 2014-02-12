@@ -18,7 +18,7 @@
       <% if !@user.provider %>
           <%= f.password_field :password, help: "Leave blank to keep your current password" %>
           <%= f.password_field :password_confirmation %>
-          <%= f.password_field :current_password, help: "We need your current password to confirm your changes" %>
+          <%= f.password_field :current_password, help: "If you're changing your password please confirm your current password" %>
       <% end %>
 
       <%= f.form_group do %>

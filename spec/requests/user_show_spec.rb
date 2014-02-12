@@ -6,7 +6,8 @@ describe "User show pages" do
 
   describe "viewing a user" do
     before do
-      @user = valid_signin
+      @user = create_user
+      valid_signin @user
       visit user_path @user
     end
 
@@ -23,7 +24,7 @@ describe "User show pages" do
     end
 
     describe "should show a list of that users reviews" do
-      let (:user2) { FactoryGirl.create(:user) }
+      let (:user2) { create_user }
 
       context "when they have no reviews" do
         context "for the current user" do
@@ -39,10 +40,10 @@ describe "User show pages" do
       end
 
       context "when they have reviews" do
-        let (:review1) { FactoryGirl.create(:review) }
-        let (:review2) { FactoryGirl.create(:review) }
-        let (:review3) { FactoryGirl.create(:review) }
-        let (:review4) { FactoryGirl.create(:review) }
+        let (:review1) { create_review }
+        let (:review2) { create_review(building_rating: 10) }
+        let (:review3) { create_review }
+        let (:review4) { create_review }
 
         before do
           @user.reviews << review1
@@ -57,9 +58,30 @@ describe "User show pages" do
           before { visit user_path @user }
           it { should_not have_content("You haven't written any reviews yet") }
 
+          it { should have_link(review1.address.formatted_address, review_path(review1)) }
+
           it "should show a summary of each review" do
             should have_content(review1.address.formatted_address)
             should have_content(review2.address.formatted_address)
+
+            should have_css("ol.reviews li ul.scores span.heat#{review1.building_rating}", :text => "Building")
+            should have_css("ol.reviews li ul.scores span.score", :text => review1.building_rating)
+            should have_css("ol.reviews li ul.scores span.heat#{review1.noise_rating}", :text => "Noise")
+            should have_css("ol.reviews li ul.scores span.score", :text => review1.noise_rating)
+            should have_css("ol.reviews li ul.scores span.heat#{review1.amenities_rating}", :text => "Amenities")
+            should have_css("ol.reviews li ul.scores span.score", :text => review1.amenities_rating)
+            should have_css("ol.reviews li ul.scores span.heat#{review1.transport_rating}", :text => "Transport")
+            should have_css("ol.reviews li ul.scores span.score", :text => review1.transport_rating)
+          end
+
+          it "should have the edit and delete links" do
+            should have_link('Edit', edit_review_path(review1))
+            should have_link('Delete', review_path(review1))
+          end
+
+          it "if score is 10 it should be shown inside the heat span" do
+            should have_css("ol.reviews li ul.scores span.heat#{review1.building_rating}", :text => "Building")
+            should have_css("ol.reviews li ul.scores span span.score", :text => review1.building_rating)
           end
         end
 
@@ -70,6 +92,11 @@ describe "User show pages" do
           it "should show a summary of each review" do
             should have_content(review3.address.formatted_address)
             should have_content(review4.address.formatted_address)
+          end
+
+          it "should not have the edit and delete links" do
+            should_not have_link('Edit', edit_review_path(review3))
+            should_not have_link('Delete', review_path(review3))
           end
         end
       end

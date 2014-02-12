@@ -8,7 +8,7 @@
                           "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=AIzaSyBMTfCaWUIjhrL59z1kL3_sItMtxnl7g5Q&sensor=false&libraries=places" %>
-
+  <%= yield(:head) %>
   <%= csrf_meta_tags %>
   <%= render 'layouts/shim' %>
 </head>
@@ -20,7 +20,6 @@
   <%= yield %>
 
   <%= render 'layouts/footer' %>
-  <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>
 </div>
 </body>
 </html>

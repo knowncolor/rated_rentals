@@ -1,8 +1,22 @@
-<% provide(:title, review_title(@review)) %>
-<%= render 'javascript' %>
+<% provide(:title, "Review of #{@review.address.formatted_address}") %>
+
+<% content_for :head do %>
+    <%= render 'review_js' %>
+<% end %>
 
 <div class='container'>
-  <h1><%= "#{review_title(@review)} by #{@review.user.name}" %></h1>
+  <h1>
+    Review of <strong><%= @review.address.formatted_address %></strong> by
+    <% if @review.user_id == current_user.id %>
+        <strong><%= link_to 'You', user_path(@review.user) %></strong>
+        <small>
+          <%= link_to '[Edit]', edit_review_path(@review) %>
+          <%= link_to '[Delete]', review_path(@review), data: { confirm: 'Are you sure?' }, :method => :delete %>
+        </small>
+    <% else %>
+        <strong><%= link_to @review.user.name, user_path(@review.user) %></strong>
+    <% end %>
+  </h1>
 
   <%= render 'review_form' %>
 </div>

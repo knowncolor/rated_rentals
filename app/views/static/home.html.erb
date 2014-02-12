@@ -1,18 +1,18 @@
-<div class="jumbotron">
-  <h1>Find Rental Reviews</h1>
+<% content_for :head do %>
+    <%= render 'home_js' %>
+<% end %>
 
-  <p>See what others have been saying about rental properties.</p>
-  <%= form_tag({controller: 'reviews', action: 'new'}, method: 'post', class: 'form-inline') do %>
+<div class="jumbotron">
+  <h1>Rental Property Reviews</h1>
+
       <div class="row">
-        <div class="col-xs-10">
+        <div class="col-xs-12">
           <label class="sr-only" for="address-search">Search by street name</label>
-          <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-xl', :placeholder => 'Search by street name', :autofocus => true, :onFocus => 'geolocate()'} %>
-        </div>
-        <div class="col-xs-2">
-          <%= button_tag "Search", :name => nil, :class => 'btn btn-primary btn-xl' %>
+          <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-xl', :placeholder => 'Search by street name'} %>
         </div>
       </div>
-  <% end %>
+      <div id="map-canvas"></div>
+
 </div>
 
 <div class="container">
@@ -28,56 +28,4 @@
     </div>
   </div>
 
-
-  <ul class="scores">
-    <li>
-      <span class="category heat1">Noise</span>
-      <span class="score">1</span>
-    </li>
-
-    <li>
-      <span class="category heat2">Building</span>
-      <span class="score">2</span>
-    </li>
-
-    <li>
-      <span class="category heat3">Building</span>
-      <span class="score">3</span>
-    </li>
-
-    <li>
-      <span class="category heat4">Building</span>
-      <span class="score">4</span>
-    </li>
-
-    <li>
-      <span class="category heat5">Building</span>
-      <span class="score">5</span>
-    </li>
-
-    <li>
-      <span class="category heat6">Building</span>
-      <span class="score">6</span>
-    </li>
-
-    <li>
-      <span class="category heat7">Building</span>
-      <span class="score">7</span>
-    </li>
-
-    <li>
-      <span class="category heat8">Building</span>
-      <span class="score">8</span>
-    </li>
-
-    <li>
-      <span class="category heat9">Building<span class="score">9</span></span>
-      <span class="score">9</span>
-    </li>
-
-    <li>
-      <span class="category heat10">Building<span class="score">10</span></span>
-      <span class="score">10</span>
-    </li>
-  </ul>
 </div>

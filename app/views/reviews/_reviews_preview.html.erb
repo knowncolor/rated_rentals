@@ -1,0 +1,27 @@
+<ol class="reviews">
+  <% reviews.each do |r| %>
+      <li>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3>
+              <strong><%= link_to r.address.formatted_address, r %></strong>
+              <small>
+                <%= link_to '[Edit]', edit_review_path(r) if r.user_id == current_user.id %>
+                <%= link_to '[Delete]', review_path(r), data: { confirm: 'Are you sure?' }, :method => :delete if r.user_id == current_user.id %>
+                <span class="pull-right"><%= pluralize(r.descriptions_word_count, 'word') %></span>
+              </small>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <ul class="scores">
+              <%= render partial: 'reviews/review_preview_score', locals: {score: r.building_rating, category: 'Building'} %>
+              <%= render partial: 'reviews/review_preview_score', locals: {score: r.furnishings_rating, category: 'Furnishings'} %>
+              <%= render partial: 'reviews/review_preview_score', locals: {score: r.noise_rating, category: 'Noise'} %>
+              <%= render partial: 'reviews/review_preview_score', locals: {score: r.amenities_rating, category: 'Amenities'} %>
+              <%= render partial: 'reviews/review_preview_score', locals: {score: r.transport_rating, category: 'Transport'} %>
+            </ul>
+          </div>
+        </div>
+      </li>
+  <% end %>
+</ol>

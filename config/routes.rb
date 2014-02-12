@@ -13,7 +13,7 @@ SampleApp::Application.routes.draw do
 
   get '/account', to: 'users#show', as: 'account'
 
-  resources :reviews, only: [:new, :create, :show, :update]
+  resources :reviews, only: [:new, :create, :update, :show, :edit, :destroy]
   resources :users, only: [:show, :index]
 
   # The priority is based upon order of creation: first created -> highest priority.

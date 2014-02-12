@@ -7,9 +7,10 @@
       <div class='form-group'>
         <label class="sr-only" for="search">Search for an address</label>
 
-        <div class='col-sm-8'>
-          <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-lg', :placeholder => 'Search for an address or street', :onFocus => 'geolocate()'} %>
-          <span class='help-block'>We can't always find flat or building numbers, <strong>try just the street</strong> if you have any problems.</span>
+        <div class='col-sm-8 col-sm-offset-2'>
+          <%= text_field_tag :search, params[:search], {:id => 'address-search', :class => 'form-control input-lg', :placeholder => 'Search for an address or street name', :onFocus => 'geolocate()'} %>
+          <span class='help-block'>The search isn't perfect, <strong>please try without the flat or house number
+            if you have any problems</strong>.</span>
         </div>
       </div>
 
@@ -69,113 +70,116 @@
             </div>
           </div>
 
-          <% end %>
-
-          </fieldset>
-
-
-          <fieldset>
-            <legend>When did you live there?</legend>
-
-            <div class='form-group'>
-              <%= f.label :start_date, "Moved In", class: "col-sm-2 control-label" %>
-
-              <div class='col-sm-3 input-group'>
-                <%= f.text_field :start_date, class: 'form-control', data: {behavior: "datepicker"} %>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-              </div>
-            </div>
-            <div class='form-group'>
-              <%= f.label :end_date, "Moved Out", class: "col-sm-2 control-label" %>
-
-              <div class='col-sm-3 input-group'>
-                <%= f.text_field :end_date, class: 'form-control', :placeholder => 'I still live there...', data: {behavior: "datepicker"} %>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>What was it like?</legend>
-            <p>Rate the below aspects of the property from 0 to 10 and add any comments you think will be useful.</p>
-            <p>Details which aren't obvious during a viewing are the most important to include.</p>
-
-            <div class='form-group'>
-              <%= f.label :building_rating, class: "col-sm-2 control-label" %>
-
-              <div class='col-sm-6'>
-                <%= f.text_field :building_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.building_rating ||= "5"} %>
-                <span class='help-block'>What is the building like? Think about the entryways, security, lifts and stairways, parking. Any problems with damp or cracks in the walls?</span>
-              </div>
-
-              <%= f.label :building_comments, class: "sr-only" %>
-
-              <div class='col-sm-6 col-sm-offset-2'>
-                <!-- , placeholder: 'Neat gated entryway on traditional Georgian street. Takes a long time to heat up. No obvious structural damage or damp. The on street parking is often crowded.' -->
-                <%= f.text_area :building_comments, class: 'form-control', height: 5 %>
-              </div>
-            </div>
-
-            <div class='form-group'>
-              <%= f.label :furnishings_rating, class: "col-sm-2 control-label" %>
-
-              <div class='col-sm-6'>
-                <%= f.text_field :furnishings_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.furnishings_rating ||= "5"} %>
-                <span class='help-block'>Think about the furniture, fittings, and finishings. Are the kitchen units nice? Do all the windows work? Are there enough power sockets?</span>
-              </div>
-
-              <%= f.label :furnishings_comments, class: "sr-only" %>
-
-              <div class='col-sm-6 col-sm-offset-2'>
-                <%= f.text_area :furnishings_comments, class: 'form-control' %>
-              </div>
-            </div>
-
-            <div class='form-group'>
-              <%= f.label :noise_rating, class: "col-sm-2 control-label" %>
-
-              <div class='col-sm-6'>
-                <%= f.text_field :noise_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.noise_rating ||= "5"} %>
-                <span class='help-block'>Can you hear passing trains, traffic or the nearby school playground? How well insulated are you from the neighbours?</span>
-              </div>
-
-              <%= f.label :noise_comments, class: "sr-only" %>
-
-              <div class='col-sm-6 col-sm-offset-2'>
-                <%= f.text_area :noise_comments, class: 'form-control' %>
-              </div>
-            </div>
-
-            <div class='form-group'>
-              <%= f.label :amenities_rating, class: "col-sm-2 control-label" %>
-
-              <div class='col-sm-6'>
-                <%= f.text_field :amenities_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.amenities_rating ||= "5"} %>
-                <span class='help-block'>Are there any good supermarkets, parks, coffee shops, gyms, launderettes, etc. nearby?</span>
-              </div>
-
-              <%= f.label :amenities_comments, class: "sr-only" %>
-
-              <div class='col-sm-6 col-sm-offset-2'>
-                <%= f.text_area :amenities_comments, class: 'form-control' %>
-              </div>
-            </div>
-
-            <div class='form-group'>
-              <%= f.label :transport_rating, class: "col-sm-2 control-label" %>
-
-              <div class='col-sm-6'>
-                <%= f.text_field :transport_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.transport_rating ||= "5"} %>
-                <span class='help-block'>Are there nearby rail and bus services? Is there good bicycle access to the property?</span>
-              </div>
-
-              <%= f.label :transport_comments, class: "sr-only" %>
-
-              <div class='col-sm-6 col-sm-offset-2'>
-                <%= f.text_area :transport_comments, class: 'form-control' %>
-              </div>
-            </div>
-          </fieldset>
-
-          <%= button_tag "Save Review", :name => nil, :class => 'btn btn-primary btn-lrg' %>
       <% end %>
+
+    </fieldset>
+
+
+    <fieldset>
+      <legend>When did you live there?</legend>
+
+      <div class='form-group'>
+        <%= f.label :start_date, "Moved In", class: "col-sm-2 control-label" %>
+
+        <div class='col-sm-3 input-group'>
+          <%= f.text_field :start_date, class: 'form-control', data: {behavior: "datepicker"} %>
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+      </div>
+      <div class='form-group'>
+        <%= f.label :end_date, "Moved Out", class: "col-sm-2 control-label" %>
+
+        <div class='col-sm-3 input-group'>
+          <%= f.text_field :end_date, class: 'form-control', :placeholder => 'I still live there...', data: {behavior: "datepicker"} %>
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>What was it like?</legend>
+      <p>Rate the below aspects of the property from 0 to 10 and add any comments you think will be useful.</p>
+      <p>Try to include details which would be difficult to know about from a viewing.</p>
+
+      <div class='form-group'>
+        <%= f.label :building_rating, class: "col-sm-2 control-label" %>
+
+        <div class='col-sm-8'>
+          <%= f.text_field :building_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.building_rating ||= "5"} %>
+          <span class='help-block'>What is the building like? Think about the entryways, security, lifts and stairways, parking. Any problems with damp or cracks in the walls?</span>
+        </div>
+
+        <%= f.label :building_comments, class: "sr-only" %>
+
+        <div class='col-sm-8 col-sm-offset-2'>
+          <!-- , placeholder: 'Neat gated entryway on traditional Georgian street. Takes a long time to heat up. No obvious structural damage or damp. The on street parking is often crowded.' -->
+          <%= f.text_area :building_comments, class: 'form-control', height: 5 %>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <%= f.label :furnishings_rating, class: "col-sm-2 control-label" %>
+
+        <div class='col-sm-8'>
+          <%= f.text_field :furnishings_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.furnishings_rating ||= "5"} %>
+          <span class='help-block'>Think about the furniture, fittings, and finishings. Are the kitchen units nice? Do all the windows work? Are there enough power sockets?</span>
+        </div>
+
+        <%= f.label :furnishings_comments, class: "sr-only" %>
+
+        <div class='col-sm-8 col-sm-offset-2'>
+          <%= f.text_area :furnishings_comments, class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <%= f.label :noise_rating, class: "col-sm-2 control-label" %>
+
+        <div class='col-sm-8'>
+          <%= f.text_field :noise_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.noise_rating ||= "5"} %>
+          <span class='help-block'>Can you hear passing trains, traffic or the nearby school playground? How well insulated are you from the neighbours?</span>
+        </div>
+
+        <%= f.label :noise_comments, class: "sr-only" %>
+
+        <div class='col-sm-8 col-sm-offset-2'>
+          <%= f.text_area :noise_comments, class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <%= f.label :amenities_rating, class: "col-sm-2 control-label" %>
+
+        <div class='col-sm-8'>
+          <%= f.text_field :amenities_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.amenities_rating ||= "5"} %>
+          <span class='help-block'>Are there any good supermarkets, parks, coffee shops, gyms, launderettes, etc. nearby?</span>
+        </div>
+
+        <%= f.label :amenities_comments, class: "sr-only" %>
+
+        <div class='col-sm-8 col-sm-offset-2'>
+          <%= f.text_area :amenities_comments, class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <%= f.label :transport_rating, class: "col-sm-2 control-label" %>
+
+        <div class='col-sm-8'>
+          <%= f.text_field :transport_rating, class: 'form-control', data: {:'slider-min' => "1", :'slider-max' => "10", :'slider-step' => "1", :'slider-value' => @review.transport_rating ||= "5"} %>
+          <span class='help-block'>Are there nearby rail and bus services? Is there good bicycle access to the property?</span>
+        </div>
+
+        <%= f.label :transport_comments, class: "sr-only" %>
+
+        <div class='col-sm-8 col-sm-offset-2'>
+          <%= f.text_area :transport_comments, class: 'form-control' %>
+        </div>
+      </div>
+    </fieldset>
+
+    <hr/>
+    <%= button_tag "Save Review", :name => 'save', :class => 'btn btn-primary btn-xl col-sm-offset-2' %>
+    <%= link_to 'Cancel', @review, :class => 'btn btn-warning btn-xl' if action_name == 'edit' %>
+
+<% end %>

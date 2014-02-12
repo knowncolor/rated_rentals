@@ -1,6 +1,8 @@
 <% provide(:title, 'Edit Your Review') %>
 
-<%= render 'javascript' %>
+<% content_for :head do %>
+    <%= render 'review_js' %>
+<% end %>
 
 <div class='container'>
   <h1>Edit Review</h1>

@@ -1,12 +1,21 @@
 class Review < ActiveRecord::Base
+  include ValidationLogger
+
   belongs_to :address
   belongs_to :user
 
   accepts_nested_attributes_for :address
 
   validate :validate_start_date, :validate_end_date
+
   validates :start_date_before_type_cast, presence: true
   validates :address, presence: true
+  validates :user, presence: true
+  validates :building_rating, :inclusion => 1..10
+  validates :furnishings_rating, :inclusion => 1..10
+  validates :noise_rating, :inclusion => 1..10
+  validates :amenities_rating, :inclusion => 1..10
+  validates :transport_rating, :inclusion => 1..10
 
   def descriptions_word_count
     building_comments.split.size +
@@ -14,6 +23,10 @@ class Review < ActiveRecord::Base
         noise_comments.split.size +
         amenities_comments.split.size +
         transport_comments.split.size
+  end
+
+  def is_owner?(user)
+    user.id == self.user_id
   end
 
   def validate_start_date
